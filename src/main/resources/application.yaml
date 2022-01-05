@@ -8,4 +8,18 @@ camunda:
       password: admin
     auto-deployment-enabled: false
     default-serialization-format: application/json
+    filter:
+      create: All tasks
+    generic-properties:
+      properties:
+#        Telemetry
+        initializeTelemetry: false
+        telemetryReporterActivate: false
 
+# H2 datasource
+spring:
+  h2.console.enabled: true
+#  datasource:
+#    url: jdbc:h2:mem:camunda-db
+#    username: sa
+#    password: sa

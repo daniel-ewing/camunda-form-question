@@ -1,6 +1,8 @@
 package camunda;
 
-public class BigObject {
+import java.io.Serializable;
+
+public class BigObject implements Serializable {
     private String bigBigBigValue = "I am too big to fail! ".repeat(1000);
 
     public String getBigBigBigValue() {

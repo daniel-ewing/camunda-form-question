@@ -4,6 +4,8 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -35,12 +37,14 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
                 .singleResult();
 
         // It is okay (we use SPIN library)
-        processEngine.getTaskService().setVariable(task.getId(), "bigObject", new BigObject());
+//        processEngine.getTaskService().setVariable(task.getId(), "bigObject", new BigObject());
+        ObjectValue typedObjectVariable = Variables.objectValue(new BigObject()).serializationDataFormat(Variables.SerializationDataFormats.JAVA).create();
+        processEngine.getTaskService().setVariable(task.getId(), "bigObject", typedObjectVariable);
 
         // It is okay too
         processEngine.getTaskService().complete(task.getId(), Map.of(
                 "name", "simple text that is okay",
-                "bigObject2", new BigObject()
+                "bigObject2", Variables.objectValue(new BigObject()).serializationDataFormat(Variables.SerializationDataFormats.JAVA).create()
         ));
 
         // now try to complete the next task from standard tasklist. It will throw
